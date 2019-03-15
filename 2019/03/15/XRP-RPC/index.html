@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="joycezwei">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="joycezwei">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>XRP RPC · joycezwei&#39;s Studio</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/">joycezwei&#39;s Studio.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">XRP RPC</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href="/">joycezwei's Studio.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            XRP RPC
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.5k</span>阅读时长: <span class="post-count reading-time">11 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/03/15</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>xrp交易信息 xrpcharts<a href="https://xrpcharts.ripple.com/#/xrp-markets" target="_blank" rel="noopener">https://xrpcharts.ripple.com/#/xrp-markets</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><h2 id="1-JSON-RPC"><a href="#1-JSON-RPC" class="headerlink" title="1.JSON-RPC"></a>1.JSON-RPC</h2><p>您可以使用任何HTTP客户端（例如Poster for Firefox或Postman for Chrome）将JSON-RPC调用为rippled服务器。大多数编程语言都有一个用于创建HTTP请求的库。</p>
+<p>请求格式<br>要发出JSON-RPC请求，请将HTTP POST请求发送到服务器正在侦听JSON-RPC连接/的端口和IP上的根路径（）rippled。您可以使用HTTP / 1.0或HTTP / 1.1。如果你使用HTTPS，你应该使用TLS v1.2。出于安全原因，rippled 不支持 SSL v3或更早版本。<br>始终包含一个Content-Type包含值的标题application/json。<br>如果您打算提出多个请求，请使用Keep-Alives，以便您不必关闭并重新打开请求之间的连接。</p>
+<p>将请求主体作为具有以下属性的JSON对象发送：<br>将该命令放在顶层”method”字段中<br>包括顶级”params”字段。这个字段的内容应该是一个只包含一个嵌套JSON对象并包含该命令所有参数的单项数组。<br>响应也是一个JSON对象。</p>
+<p>公共服务器<br>目前，Ripple（公司）在以下地区维护一套公共JSON-RPC服务器：</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Port</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s1.ripple.com</td>
+<td>51234</td>
+<td>General purpose server</td>
+</tr>
+<tr>
+<td>s2.ripple.com</td>
+<td>51234</td>
+<td>Full-history server</td>
+</tr>
+</tbody>
+</table>
+<p>这些公共服务器不用于持续或商业用途，并且可能随时变得不可用。对于常规使用，您应该运行自己的波纹服务器或与您信任的人签订合同。</p>
+<h2 id="2-API方法"><a href="#2-API方法" class="headerlink" title="2.API方法"></a>2.API方法</h2><p>Websocket和JSON-RPC API的API方法由命令名称定义，并分为公用命令和管理命令。<br><a href="https://developers.ripple.com/public-rippled-methods.html" target="_blank" rel="noopener">https://developers.ripple.com/public-rippled-methods.html</a><br>公共命令不一定适用于普通公众，但是它们被连接到服务器的任何客户端使用。（将公共命令看作是运行服务器的组织的成员或客户，而管理命令用于负责保持服务器运行的人员。）公共命令包括诸如检查分类账状态，查找连接用户的路径以及提交交易等等。另一方面，管理命令仅用于受信任的服务器操作员，并包含用于管理，监视和调试服务器的命令。<br><a href="https://developers.ripple.com/admin-rippled-methods.html" target="_blank" rel="noopener">https://developers.ripple.com/admin-rippled-methods.html</a><br>使用这些管理API方法直接与ripple服务器通信。管理方法仅适用于负责保持服务器运行的可信人员。管理方法包括用于管理，监视和调试服务器的命令。<br>仅当您连接到rippled.cfg文件标识为admin的主机和端口上的rippled时，Admin命令才可用。默认情况下，命令行客户端使用管理连接。有关连接到波纹的更多信息，请参阅波纹API入门。</p>
+<h1 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h1><ol>
+<li>leger<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">parallels@parallels-vm:~/rippled/my_build$ ./rippled ledger current</span><br><span class="line">Loading: <span class="string">"/home/parallels/.config/ripple/rippled.cfg"</span></span><br><span class="line"><span class="number">2019</span>-Jan<span class="number">-17</span> <span class="number">06</span>:<span class="number">58</span>:<span class="number">02.594239288</span> HTTPClient:NFO Connecting to <span class="number">172.18</span><span class="number">.0</span><span class="number">.116</span>:<span class="number">5005</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">"result"</span> : &#123;</span><br><span class="line">      <span class="string">"ledger"</span> : &#123;</span><br><span class="line">         <span class="string">"closed"</span> : <span class="literal">false</span>,</span><br><span class="line">         <span class="string">"ledger_index"</span> : <span class="string">"44463447"</span>,</span><br><span class="line">         <span class="string">"parent_hash"</span> : <span class="string">"0888E930F125C66845F4501B0510DC9C81D6E8F88B0407C593FCC85D93E82C26"</span>,</span><br><span class="line">         <span class="string">"seqNum"</span> : <span class="string">"44463447"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"ledger_current_index"</span> : <span class="number">44463447</span>,</span><br><span class="line">      <span class="string">"status"</span> : <span class="string">"success"</span>,</span><br><span class="line">      <span class="string">"validated"</span> : <span class="literal">false</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>2.admin api<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">parallels@parallels-vm:~/rippled/my_build$ ./rippled validation_create <span class="string">"BAWL MAN JADE MOON DOVE GEM SON NOW HAD ADEN GLOW TIRE"</span></span><br><span class="line">Loading: <span class="string">"/home/parallels/.config/ripple/rippled.cfg"</span></span><br><span class="line"><span class="number">2019</span>-Jan<span class="number">-17</span> <span class="number">07</span>:<span class="number">32</span>:<span class="number">22.911286703</span> HTTPClient:NFO Connecting to <span class="number">172.18</span><span class="number">.0</span><span class="number">.116</span>:<span class="number">5005</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">"result"</span> : &#123;</span><br><span class="line">      <span class="string">"status"</span> : <span class="string">"success"</span>,</span><br><span class="line">      <span class="string">"validation_key"</span> : <span class="string">"BAWL MAN JADE MOON DOVE GEM SON NOW HAD ADEN GLOW TIRE"</span>,</span><br><span class="line">      <span class="string">"validation_private_key"</span> : <span class="string">"pa2BDxqgdiRupSb8gVsYfy73A4An2jroEhuaVXjrLHH6Z1iyBEy"</span>,</span><br><span class="line">      <span class="string">"validation_public_key"</span> : <span class="string">"n9Jx6RS6zSgqsgnuWJifNA9EqgjTKAywqYNReK5NRd1yLBbfC3ng"</span>,</span><br><span class="line">      <span class="string">"validation_seed"</span> : <span class="string">"snjJkyBGogTem5dFGbcRaThKq2Rt3"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个方法不能在外部通过http：//172.18.0.116:5005和对应参数实现调用，报错只有forbidden，在本地上调用是可以的<br>目前是只能修改rippled.cfg里面的<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[port_rpc_admin_local]</span><br><span class="line">port = <span class="number">5005</span></span><br><span class="line">ip = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> <span class="comment">//可以修改为主机ip 127.0.0.1或172.18.0.116 但是不能改为我的外部主机ip172.18.0.229不知道为啥</span></span><br><span class="line">admin = <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">protocol = http</span><br></pre></td></tr></table></figure></p>
+<p>总之为了便于调试是开放成这样的</p>
+<h1 id="API-RPC调用"><a href="#API-RPC调用" class="headerlink" title="API RPC调用"></a>API RPC调用</h1><p>xrp浏览器<a href="https://xrpcharts.ripple.com/#/graph/" target="_blank" rel="noopener">https://xrpcharts.ripple.com/#/graph/</a></p>
+<h2 id="1-data-api-v2"><a href="#1-data-api-v2" class="headerlink" title="1.data api v2"></a>1.data api v2</h2><p><a href="https://developers.ripple.com/data-api.html" target="_blank" rel="noopener">https://developers.ripple.com/data-api.html</a><br>Ripple Data API v2提供对XRP Ledger中更改信息的访问，包括事务历史记录和已处理的分析数据。 此信息存储在专用数据库中，该数据库可释放rippled 服务器以保留较少的历史分类帐版本。 Data API v2还充当XRP图表和ripple.com等应用程序的数据源。<br>Ripple在以下地址提供尽可能完整的事务记录的Data API实时实例：<br><a href="https://data.ripple.com" target="_blank" rel="noopener">https://data.ripple.com</a></p>
+<p>但是只有get，只能查询，不过在查询上是很方便的吧，不支持测试网</p>
+<h2 id="2-Postman调用"><a href="#2-Postman调用" class="headerlink" title="2.Postman调用"></a>2.Postman调用</h2><p>url固定，方法在参数里变动<br>虚拟机中 <a href="http://172.18.0.116:5005" target="_blank" rel="noopener">http://172.18.0.116:5005</a></p>
+<h3 id="2-1-Public-rippled-Methods"><a href="#2-1-Public-rippled-Methods" class="headerlink" title="2.1 Public rippled Methods"></a>2.1 Public rippled Methods</h3><p>api 官网<a href="https://developers.ripple.com/public-rippled-methods.html" target="_blank" rel="noopener">https://developers.ripple.com/public-rippled-methods.html</a><br>公共方法 1.测试网 <a href="https://s.altnet.rippletest.net:51234" target="_blank" rel="noopener">https://s.altnet.rippletest.net:51234</a><br>2.官方支持的公共网 <a href="https://s1.ripple.com:51234" target="_blank" rel="noopener">https://s1.ripple.com:51234</a><br>之前在官网申请的账号<strong>rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW</strong>，只能在测试网查到，该账号下有10000xrp用于测试</p>
+<h4 id="Account-Methods"><a href="#Account-Methods" class="headerlink" title="Account Methods"></a>Account Methods</h4><p>1.account_info,xrp的金额<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">输入：</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"account_info"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,<span class="comment">//唯一的账户标识，常见为账户地址，r开头，必填</span></span><br><span class="line">            <span class="string">"strict"</span>: <span class="literal">true</span>,<span class="comment">//true表示account字段只接受公钥或xrp ledger地址</span></span><br><span class="line">            <span class="string">"ledger_index"</span>: <span class="string">"current"</span>,<span class="comment">//使用的分类帐序号</span></span><br><span class="line">            <span class="string">"queue"</span>: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"account_data"</span>: &#123;</span><br><span class="line">            <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">            <span class="string">"Balance"</span>: <span class="string">"10000000000"</span>,<span class="comment">//表示10000xrp，后面多了6位</span></span><br><span class="line">            <span class="string">"Flags"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"LedgerEntryType"</span>: <span class="string">"AccountRoot"</span>,<span class="comment">//uint16，值0x0061表示accountroot，表示这是一个accountroot对象</span></span><br><span class="line">            <span class="string">"OwnerCount"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"PreviousTxnID"</span>: <span class="string">"BEF76CB37AE99621A78C3CA88517492DD9803B8949556891A5D2857621C7568C"</span>,</span><br><span class="line">            <span class="string">"PreviousTxnLgrSeq"</span>: <span class="number">16100549</span>,</span><br><span class="line">            <span class="string">"Sequence"</span>: <span class="number">1</span>,<span class="comment">//表示下一个有效交易的序列号，从1开始，每次加一</span></span><br><span class="line">            <span class="string">"index"</span>: <span class="string">"D9916216071880E23C98371A9E20F8BF1FE70B179B58985D2656FF3C07418C7C"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"ledger_current_index"</span>: <span class="number">16178254</span>,<span class="comment">//当前分类帐索引</span></span><br><span class="line">        <span class="string">"queue_data"</span>: &#123;</span><br><span class="line">            <span class="string">"txn_count"</span>: <span class="number">0</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"validated"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.account_channels<br>返回账户的付款渠道信息,主网<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"account_channels"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [&#123;</span><br><span class="line">        <span class="string">"account"</span>: <span class="string">"rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH"</span>,</span><br><span class="line">        <span class="string">"destination_account"</span>: <span class="string">"rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn"</span>,</span><br><span class="line">        <span class="string">"ledger_index"</span>: <span class="string">"validated"</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;</span><br><span class="line">输出</span><br><span class="line">channels为空，不知为啥</span><br></pre></td></tr></table></figure></p>
+<p>3.account_currencies<br>获取账户能发送和接收的所有币种，主网,在测试网查询就是只能发送btc，没有接收币种，还没理清楚测试和主网，本地查询的结果是和公共网相同的<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"account_currencies"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"account"</span>: <span class="string">"rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL"</span>,<span class="comment">//必填</span></span><br><span class="line">            <span class="string">"account_index"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"ledger_index"</span>: <span class="string">"validated"</span>,</span><br><span class="line">            <span class="string">"strict"</span>: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">输出</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"ledger_hash"</span>: <span class="string">"C39793E7694863787B66060B0BD23BF71D9E9DA6F23E99303428842443092168"</span>,</span><br><span class="line">        <span class="string">"ledger_index"</span>: <span class="number">44483544</span>,</span><br><span class="line">        <span class="string">"receive_currencies"</span>: [<span class="comment">//可以接收的币种</span></span><br><span class="line">            <span class="string">"BTC"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"send_currencies"</span>: [<span class="comment">//可以发送的币种</span></span><br><span class="line">            <span class="string">"BCC"</span>,</span><br><span class="line">            <span class="string">"BCH"</span>,</span><br><span class="line">            <span class="string">"BTC"</span>,</span><br><span class="line">            <span class="string">"BTG"</span>,</span><br><span class="line">            <span class="string">"BTW"</span>,</span><br><span class="line">            <span class="string">"ETH"</span>,</span><br><span class="line">            <span class="string">"EUR"</span>,</span><br><span class="line">            <span class="string">"GCB"</span>,</span><br><span class="line">            <span class="string">"USD"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"validated"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.account_lines<br>account_lines方法返回有关帐户信任行的信息，包括所有非XRP货币和资产的余额。检索到的所有信息都与分类帐的特定版本有关。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"account_lines"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"account"</span>: <span class="string">"rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL"</span><span class="comment">//必填</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">输出</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"account"</span>: <span class="string">"rchGBxcD1A1C2tdxF6papQYZ8kjRKMYcL"</span>,</span><br><span class="line">        <span class="string">"ledger_current_index"</span>: <span class="number">44483853</span>,</span><br><span class="line">        <span class="string">"limit"</span>: <span class="number">200</span>,</span><br><span class="line">        <span class="string">"lines"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"account"</span>: <span class="string">"rhKgFxe7Mp38yeJzvwoNLm46RxMdXotTn6"</span>,</span><br><span class="line">                <span class="string">"balance"</span>: <span class="string">"-114.3552452032079"</span>,</span><br><span class="line">                <span class="string">"currency"</span>: <span class="string">"BTC"</span>,</span><br><span class="line">                <span class="string">"limit"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="string">"limit_peer"</span>: <span class="string">"1000000000"</span>,</span><br><span class="line">                <span class="string">"quality_in"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="string">"quality_out"</span>: <span class="number">0</span></span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"account"</span>: <span class="string">"rpafqw55VsCprwKwuAChWCufHoybxcEEJn"</span>,</span><br><span class="line">                <span class="string">"balance"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="string">"currency"</span>: <span class="string">"BTC"</span>,</span><br><span class="line">                <span class="string">"limit"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="string">"limit_peer"</span>: <span class="string">"1000000000"</span>,</span><br><span class="line">                <span class="string">"no_ripple_peer"</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">"quality_in"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="string">"quality_out"</span>: <span class="number">0</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"account"</span>: <span class="string">"rJyBJLRaYvVYpBTtabAgNcRUgeGJTp4AbW"</span>,</span><br><span class="line">                <span class="string">"balance"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="string">"currency"</span>: <span class="string">"BTC"</span>,</span><br><span class="line">                <span class="string">"limit"</span>: <span class="string">"0"</span>,</span><br><span class="line">                <span class="string">"limit_peer"</span>: <span class="string">"1000000000"</span>,</span><br><span class="line">                <span class="string">"no_ripple_peer"</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="string">"quality_in"</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="string">"quality_out"</span>: <span class="number">0</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"marker"</span>: <span class="string">"E8EF4D2BCE50C70FEDD8027939D52ACABADE9FFFEDFA7BA3A6AE946B565C1DDC"</span>,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"validated"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>5.account_tx<br>获取与账户相关的交易，在测试网<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"account_tx"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,<span class="comment">//必填</span></span><br><span class="line">            <span class="string">"binary"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"forward"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"ledger_index_max"</span>: <span class="number">-1</span>,<span class="comment">//-1表示使用最近的分类帐</span></span><br><span class="line">            <span class="string">"ledger_index_min"</span>: <span class="number">-1</span>,<span class="comment">//-1表示使用服务器可用的最早验证过的分类帐本</span></span><br><span class="line">            <span class="string">"limit"</span>: <span class="number">2</span><span class="comment">//限制要检索的事务数，服务器不必遵守</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">输出</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">        <span class="string">"ledger_index_max"</span>: <span class="number">16320389</span>,</span><br><span class="line">        <span class="string">"ledger_index_min"</span>: <span class="number">15345995</span>,</span><br><span class="line">        <span class="string">"limit"</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"transactions"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"meta"</span>: &#123;</span><br><span class="line">                    <span class="string">"AffectedNodes"</span>: [<span class="comment">//影响的节点</span></span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"ModifiedNode"</span>: &#123;<span class="comment">//修改节点</span></span><br><span class="line">                                <span class="string">"FinalFields"</span>: &#123;</span><br><span class="line">                                    <span class="string">"Account"</span>: <span class="string">"rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe"</span>,</span><br><span class="line">                                    <span class="string">"Balance"</span>: <span class="string">"47814071178872671"</span>,</span><br><span class="line">                                    <span class="string">"Flags"</span>: <span class="number">0</span>,</span><br><span class="line">                                    <span class="string">"OwnerCount"</span>: <span class="number">0</span>,</span><br><span class="line">                                    <span class="string">"Sequence"</span>: <span class="number">212720</span></span><br><span class="line">                                &#125;,</span><br><span class="line">                                <span class="string">"LedgerEntryType"</span>: <span class="string">"AccountRoot"</span>,</span><br><span class="line">                                <span class="string">"LedgerIndex"</span>: <span class="string">"31CCE9D28412FF973E9AB6D0FA219BACF19687D9A2456A0C2ABC3280E9D47E37"</span>,</span><br><span class="line">                                <span class="string">"PreviousFields"</span>: &#123;</span><br><span class="line">                                    <span class="string">"Balance"</span>: <span class="string">"47814081178872683"</span>,</span><br><span class="line">                                    <span class="string">"Sequence"</span>: <span class="number">212719</span></span><br><span class="line">                                &#125;,</span><br><span class="line">                                <span class="string">"PreviousTxnID"</span>: <span class="string">"89B6B142C5B4BC97F11A423E8348E70DFAB365D1A45E26F689E8E6F5B9185593"</span>,</span><br><span class="line">                                <span class="string">"PreviousTxnLgrSeq"</span>: <span class="number">16100488</span></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"CreatedNode"</span>: &#123;<span class="comment">//创建节点</span></span><br><span class="line">                                <span class="string">"LedgerEntryType"</span>: <span class="string">"AccountRoot"</span>,</span><br><span class="line">                                <span class="string">"LedgerIndex"</span>: <span class="string">"D9916216071880E23C98371A9E20F8BF1FE70B179B58985D2656FF3C07418C7C"</span>,</span><br><span class="line">                                <span class="string">"NewFields"</span>: &#123;</span><br><span class="line">                                    <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">                                    <span class="string">"Balance"</span>: <span class="string">"10000000000"</span>,</span><br><span class="line">                                    <span class="string">"Sequence"</span>: <span class="number">1</span></span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    ],</span><br><span class="line">                    <span class="string">"TransactionIndex"</span>: <span class="number">0</span>,</span><br><span class="line">                    <span class="string">"TransactionResult"</span>: <span class="string">"tesSUCCESS"</span>,<span class="comment">//成功</span></span><br><span class="line">                    <span class="string">"delivered_amount"</span>: <span class="string">"10000000000"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"tx"</span>: &#123;</span><br><span class="line">                    <span class="string">"Account"</span>: <span class="string">"rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe"</span>,</span><br><span class="line">                    <span class="string">"Amount"</span>: <span class="string">"10000000000"</span>,</span><br><span class="line">                    <span class="string">"Destination"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">                    <span class="string">"Fee"</span>: <span class="string">"12"</span>,</span><br><span class="line">                    <span class="string">"Flags"</span>: <span class="number">2147483648</span>,</span><br><span class="line">                    <span class="string">"LastLedgerSequence"</span>: <span class="number">16100552</span>,</span><br><span class="line">                    <span class="string">"Sequence"</span>: <span class="number">212719</span>,</span><br><span class="line">                    <span class="string">"SigningPubKey"</span>: <span class="string">"02356E89059A75438887F9FEE2056A2890DB82A68353BE9C0C0C8F89C0018B37FC"</span>,</span><br><span class="line">                    <span class="string">"TransactionType"</span>: <span class="string">"Payment"</span>,</span><br><span class="line">                    <span class="string">"TxnSignature"</span>: <span class="string">"3045022100C208156B04E614148EAD4998C7304F44E2EE724AD4072E796C3C50337FD286E2022029688C66D8BD1144D3CD392658254AF85116E04D14099E52C484FF43E8BE09F0"</span>,</span><br><span class="line">                    <span class="string">"date"</span>: <span class="number">600855762</span>,</span><br><span class="line">                    <span class="string">"hash"</span>: <span class="string">"BEF76CB37AE99621A78C3CA88517492DD9803B8949556891A5D2857621C7568C"</span>,</span><br><span class="line">                    <span class="string">"inLedger"</span>: <span class="number">16100549</span>,</span><br><span class="line">                    <span class="string">"ledger_index"</span>: <span class="number">16100549</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"validated"</span>: <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="ledger"><a href="#ledger" class="headerlink" title="ledger"></a>ledger</h4><p>ledger_index：序列号或者以下短语<br>validated表示通过整个网络验证的最新分类帐，closed表示进行修改并建议进行验证的最新关闭分类帐，current表示当前服务器当前工作版本的分类帐。<br>1.ledger<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"ledger"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"ledger_index"</span>: <span class="string">"validated"</span>,<span class="comment">//通过验证的最新分类帐</span></span><br><span class="line">            <span class="string">"accounts"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"full"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"transactions"</span>: <span class="literal">false</span>,<span class="comment">//不显示交易</span></span><br><span class="line">            <span class="string">"expand"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"owner_funds"</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"ledger"</span>: &#123;</span><br><span class="line">            <span class="string">"accepted"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="string">"account_hash"</span>: <span class="string">"ED2460F9B0EB744A76F9B69670D287BE0C39218A47880E9D02E48419AC843C5C"</span>,</span><br><span class="line">            <span class="string">"close_flags"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"close_time"</span>: <span class="number">601527160</span>,</span><br><span class="line">            <span class="string">"close_time_human"</span>: <span class="string">"2019-Jan-23 02:52:40.000000000"</span>,</span><br><span class="line">            <span class="string">"close_time_resolution"</span>: <span class="number">10</span>,</span><br><span class="line">            <span class="string">"closed"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="string">"hash"</span>: <span class="string">"67E63DD5E21CBF2A6DDB4638BD3ACEAFB68E5F1BEDF19A522A7DB71D8D0DCD51"</span>,</span><br><span class="line">            <span class="string">"ledger_hash"</span>: <span class="string">"67E63DD5E21CBF2A6DDB4638BD3ACEAFB68E5F1BEDF19A522A7DB71D8D0DCD51"</span>,</span><br><span class="line">            <span class="string">"ledger_index"</span>: <span class="string">"16321393"</span>,</span><br><span class="line">            <span class="string">"parent_close_time"</span>: <span class="number">601527152</span>,</span><br><span class="line">            <span class="string">"parent_hash"</span>: <span class="string">"1ADA61E3D056B0B1E18247F4E4EFD3B2ACBD3C64B822B1A1F80BFEC93F408FD5"</span>,</span><br><span class="line">            <span class="string">"seqNum"</span>: <span class="string">"16321393"</span>,</span><br><span class="line">            <span class="string">"totalCoins"</span>: <span class="string">"99997068246921000"</span>,</span><br><span class="line">            <span class="string">"total_coins"</span>: <span class="string">"99997068246921000"</span>,</span><br><span class="line">            <span class="string">"transaction_hash"</span>: <span class="string">"BCEF723D41464B86BD5457B7BFCE940481B9CAD73BE9CF0E7EFCE23391EF30E2"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"ledger_hash"</span>: <span class="string">"67E63DD5E21CBF2A6DDB4638BD3ACEAFB68E5F1BEDF19A522A7DB71D8D0DCD51"</span>,</span><br><span class="line">        <span class="string">"ledger_index"</span>: <span class="number">16321393</span>,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"validated"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.ledger_closed,ledger_current<br>3.ledger_data 根据hash获取ledger信息<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"ledger_data"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"binary"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="string">"ledger_hash"</span>: <span class="string">"842B57C1CC0613299A686D3E9F310EC0422C84D3911E5056389AA7E5808A93C8"</span>,</span><br><span class="line">            <span class="string">"limit"</span>: <span class="number">5</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"ledger"</span>: &#123;</span><br><span class="line">            <span class="string">"closed"</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="string">"ledger_data"</span>: <span class="string">"006911D2016345760FA95E22DEF64F075DD2DAD8C76292B43888DCC88214E61E7323C2B0364733AC71A4EFBC09190FE6C4176E8A445F171B0D52613CEEA772687A1F11E4D061B574CB2AD993016661124C467D20034890D16E2519019E4C3911C3A1CBE96A39067AEA9B3C971B18F96E1B18F9780A00"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"ledger_hash"</span>: <span class="string">"842B57C1CC0613299A686D3E9F310EC0422C84D3911E5056389AA7E5808A93C8"</span>,</span><br><span class="line">        <span class="string">"ledger_index"</span>: <span class="number">6885842</span>,</span><br><span class="line">        <span class="string">"marker"</span>: <span class="string">"0002A590029B53BE7857EFF9985F770EC792CE483720EB5E963C4D6A607D43DF"</span>,</span><br><span class="line">        <span class="string">"state"</span>: [</span><br><span class="line">            </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"data"</span>: <span class="string">"1100612200000000240000000125003E742F2D0000000055286498B513710CFEB2D723A554C7557983D1952DF4DEE342C40DCB43067C9A21624000000306DC42008114225BAB89C4A4B94624BB069D6DB3C819F934991C"</span>,</span><br><span class="line">                <span class="string">"index"</span>: <span class="string">"0000B717320558E2DE1A3B9FDB24E9A695BF05D1A44E4A4683212BB1DD0FBA23"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            ...</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"validated"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.ledger_entry<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"ledger_entry"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"account_root"</span>: <span class="string">"r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59"</span>,</span><br><span class="line">            <span class="string">"ledger_index"</span>: <span class="string">"validated"</span>,</span><br><span class="line">            <span class="string">"type"</span>: <span class="string">"account_root"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="transaction"><a href="#transaction" class="headerlink" title="transaction"></a>transaction</h4><p>1.sign 属于admin指令，如果要作为公共密钥使用，需要修改rippled.cfg中的 <strong>[signing_support]true</strong><br>在测试网运行，从rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW （sn58eFgPQZo6EuowYyYJmdh7Brgej）到 r4WWXME4i9CwG2GqmZDeb3Phkybnqt8h3b<br>不同的transactionType有不同的tx_json<a href="https://developers.ripple.com/transaction-types.html" target="_blank" rel="noopener">https://developers.ripple.com/transaction-types.html</a><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"sign"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"offline"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"secret"</span>: <span class="string">"sn58eFgPQZo6EuowYyYJmdh7Brgej"</span>,<span class="comment">//</span></span><br><span class="line">            <span class="string">"tx_json"</span>: &#123;<span class="comment">//必填</span></span><br><span class="line">                <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">                <span class="string">"Amount"</span>: &#123;</span><br><span class="line">                    <span class="string">"currency"</span>: <span class="string">"XRP"</span>,</span><br><span class="line">                    <span class="string">"issuer"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">                    <span class="string">"value"</span>: <span class="string">"1000000"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"Destination"</span>: <span class="string">"r4WWXME4i9CwG2GqmZDeb3Phkybnqt8h3b"</span>,</span><br><span class="line">                <span class="string">"TransactionType"</span>: <span class="string">"Payment"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"fee_mult_max"</span>: <span class="number">1000</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">提示这个指令将会被抛弃</span><br><span class="line">This command has been deprecated <span class="keyword">and</span> will be removed in a future version of the server. Please migrate to a standalone signing tool</span><br><span class="line">报错Invalid field 'tx_json.Amount'</span><br><span class="line"><span class="comment">//仔细看了文档后发现，xrp和其他货币的填写方式是不同的，xrp没有issuer，金额直接是string没有对象，也就没有value，金额是没有小数点的，所以表示1xrp要用1000000（6个0），也没有currency字段，所以重新填写为</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"sign"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"offline"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="string">"secret"</span>: <span class="string">"sn58eFgPQZo6EuowYyYJmdh7Brgej"</span>,</span><br><span class="line">            <span class="string">"tx_json"</span>: &#123;</span><br><span class="line">                <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">                <span class="string">"Amount"</span>: <span class="string">"1000000"</span>,</span><br><span class="line">                <span class="string">"Destination"</span>: <span class="string">"r4WWXME4i9CwG2GqmZDeb3Phkybnqt8h3b"</span>,</span><br><span class="line">                <span class="string">"TransactionType"</span>: <span class="string">"Payment"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"fee_mult_max"</span>: <span class="number">1000</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">output:</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"deprecated"</span>: <span class="string">"This command has been deprecated and will be removed in a future version of the server. Please migrate to a standalone signing tool."</span>,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"tx_blob"</span>: <span class="string">"120000228000000024000000016140000000000F424068400000000000000A732103CFA5CA44158AFFA73FD4F1955B69483115082360A442E2E88770350BF8F48EF874473045022100DEE59E442D972BA8DE0C9728D99347331A723FA0377D4CA34A2A0F58F38B806702206565D833C6EE1218B6969340ADAF67ACC98F632C71B03636C00671C99056C67E81142DC738B3E8F6FA6C47E51E6B18AC3FB988CDC6988314EBEF596071B2EBEB58570293DB7EBEEE7B6A7BAA"</span>,</span><br><span class="line">        <span class="string">"tx_json"</span>: &#123;</span><br><span class="line">            <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">            <span class="string">"Amount"</span>: <span class="string">"1000000"</span>,</span><br><span class="line">            <span class="string">"Destination"</span>: <span class="string">"r4WWXME4i9CwG2GqmZDeb3Phkybnqt8h3b"</span>,</span><br><span class="line">            <span class="string">"Fee"</span>: <span class="string">"10"</span>,</span><br><span class="line">            <span class="string">"Flags"</span>: <span class="number">2147483648</span>,</span><br><span class="line">            <span class="string">"Sequence"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"SigningPubKey"</span>: <span class="string">"03CFA5CA44158AFFA73FD4F1955B69483115082360A442E2E88770350BF8F48EF8"</span>,</span><br><span class="line">            <span class="string">"TransactionType"</span>: <span class="string">"Payment"</span>,</span><br><span class="line">            <span class="string">"TxnSignature"</span>: <span class="string">"3045022100DEE59E442D972BA8DE0C9728D99347331A723FA0377D4CA34A2A0F58F38B806702206565D833C6EE1218B6969340ADAF67ACC98F632C71B03636C00671C99056C67E"</span>,</span><br><span class="line">            <span class="string">"hash"</span>: <span class="string">"EE4D30B285203DB92C0DC6D56AC8EDA11F46B0EF5EA14F2C1EEEEEC145D908E9"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.submit<br>sign事生成的tx_blob与日期无关<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"submit"</span>,</span><br><span class="line">    <span class="string">"params"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"tx_blob"</span>: <span class="string">"120000228000000024000000016140000000000F424068400000000000000A732103CFA5CA44158AFFA73FD4F1955B69483115082360A442E2E88770350BF8F48EF874473045022100DEE59E442D972BA8DE0C9728D99347331A723FA0377D4CA34A2A0F58F38B806702206565D833C6EE1218B6969340ADAF67ACC98F632C71B03636C00671C99056C67E81142DC738B3E8F6FA6C47E51E6B18AC3FB988CDC6988314EBEF596071B2EBEB58570293DB7EBEEE7B6A7BAA"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"result"</span>: &#123;</span><br><span class="line">        <span class="string">"engine_result"</span>: <span class="string">"tesSUCCESS"</span>,</span><br><span class="line">        <span class="string">"engine_result_code"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"engine_result_message"</span>: <span class="string">"The transaction was applied. Only final in a validated ledger."</span>,</span><br><span class="line">        <span class="string">"status"</span>: <span class="string">"success"</span>,</span><br><span class="line">        <span class="string">"tx_blob"</span>: <span class="string">"120000228000000024000000016140000000000F424068400000000000000A732103CFA5CA44158AFFA73FD4F1955B69483115082360A442E2E88770350BF8F48EF874473045022100DEE59E442D972BA8DE0C9728D99347331A723FA0377D4CA34A2A0F58F38B806702206565D833C6EE1218B6969340ADAF67ACC98F632C71B03636C00671C99056C67E81142DC738B3E8F6FA6C47E51E6B18AC3FB988CDC6988314EBEF596071B2EBEB58570293DB7EBEEE7B6A7BAA"</span>,</span><br><span class="line">        <span class="string">"tx_json"</span>: &#123;</span><br><span class="line">            <span class="string">"Account"</span>: <span class="string">"rnBhh8W9HgbthggRv4CprwrZEpLyBM1iSW"</span>,</span><br><span class="line">            <span class="string">"Amount"</span>: <span class="string">"1000000"</span>,</span><br><span class="line">            <span class="string">"Destination"</span>: <span class="string">"r4WWXME4i9CwG2GqmZDeb3Phkybnqt8h3b"</span>,</span><br><span class="line">            <span class="string">"Fee"</span>: <span class="string">"10"</span>,</span><br><span class="line">            <span class="string">"Flags"</span>: <span class="number">2147483648</span>,</span><br><span class="line">            <span class="string">"Sequence"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">"SigningPubKey"</span>: <span class="string">"03CFA5CA44158AFFA73FD4F1955B69483115082360A442E2E88770350BF8F48EF8"</span>,</span><br><span class="line">            <span class="string">"TransactionType"</span>: <span class="string">"Payment"</span>,</span><br><span class="line">            <span class="string">"TxnSignature"</span>: <span class="string">"3045022100DEE59E442D972BA8DE0C9728D99347331A723FA0377D4CA34A2A0F58F38B806702206565D833C6EE1218B6969340ADAF67ACC98F632C71B03636C00671C99056C67E"</span>,</span><br><span class="line">            <span class="string">"hash"</span>: <span class="string">"EE4D30B285203DB92C0DC6D56AC8EDA11F46B0EF5EA14F2C1EEEEEC145D908E9"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>server_info<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">输入：</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">"method"</span>: <span class="string">"server_info"</span></span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line"><span class="string">"complete_ledgers"</span>: <span class="string">"32570-44581433"</span> <span class="comment">//https://s2.ripple.com:51234</span></span><br><span class="line"><span class="string">"complete_ledgers"</span>: <span class="string">"43261544-44581456"</span> <span class="comment">//https://s1.ripple.com:51234</span></span><br><span class="line"><span class="string">"complete_ledgers"</span>: <span class="string">"44578753-44579823,44580161-44581466"</span> <span class="comment">//这是我本地的环境，不知为啥分段了</span></span><br><span class="line"><span class="string">"complete_ledgers"</span>: <span class="string">"15345995-16320191"</span><span class="comment">//https://s.altnet.rippletest.net:51234 测试环境</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-2-Admin-rippled-Medthods"><a href="#2-2-Admin-rippled-Medthods" class="headerlink" title="2.2 Admin rippled Medthods"></a>2.2 Admin rippled Medthods</h3>
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://joycezwei.github.io">joycezwei</a>
+            </p><p>原文链接：<a href="https://joycezwei.github.io/2019/03/15/XRP-RPC/">https://joycezwei.github.io/2019/03/15/XRP-RPC/</a>
+            </p><p>发表日期：<a href="https://joycezwei.github.io/2019/03/15/XRP-RPC/">March 15th 2019, 2:11:47 pm</a>
+            </p><p>更新日期：<a href="https://joycezwei.github.io/2019/03/15/XRP-RPC/">March 15th 2019, 2:12:29 pm</a>
+            </p><p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2019/03/15/test/" title="XRP RPC">
+                    <div class="nextTitle">XRP RPC</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2019/01/11/EOS-build/" title="EOS 搭建">
+                    <div class="prevTitle">EOS 搭建</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:1143799967@qq.com" class="iconfont-archer email" title="email"></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/joycezwei" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JSON-RPC"><span class="toc-number">1.1.</span> <span class="toc-text">1.JSON-RPC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-API方法"><span class="toc-number">1.2.</span> <span class="toc-text">2.API方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令行"><span class="toc-number">2.</span> <span class="toc-text">命令行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#API-RPC调用"><span class="toc-number">3.</span> <span class="toc-text">API RPC调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-data-api-v2"><span class="toc-number">3.1.</span> <span class="toc-text">1.data api v2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Postman调用"><span class="toc-number">3.2.</span> <span class="toc-text">2.Postman调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Public-rippled-Methods"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.1 Public rippled Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Account-Methods"><span class="toc-number">3.2.1.1.</span> <span class="toc-text">Account Methods</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ledger"><span class="toc-number">3.2.1.2.</span> <span class="toc-text">ledger</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#transaction"><span class="toc-number">3.2.1.3.</span> <span class="toc-text">transaction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#server"><span class="toc-number">3.2.1.4.</span> <span class="toc-text">server</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Admin-rippled-Medthods"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.2 Admin rippled Medthods</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 5
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href="/2019/01/11/hello-world/">Hello World</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span><a class="archive-post-title" href="/2019/03/15/test/">XRP RPC</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span><a class="archive-post-title" href="/2019/03/15/XRP-RPC/">XRP RPC</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href="/2019/01/11/EOS-build/">EOS 搭建</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span><a class="archive-post-title" href="/2019/01/11/EOS-RPC-0/">EOS RPC接口调用</a>
+        </li>
+    
+    </ul></div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br>
+    1、请确保node版本大于6.2<br>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "joycezwei"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
